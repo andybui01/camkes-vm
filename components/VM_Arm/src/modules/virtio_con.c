@@ -27,10 +27,17 @@
 
 #define NUM_PORTS ARRAY_SIZE(serial_layout)
 
+/*
+ * Represents the virtqueues used in a given link between
+ * two VMs.
+ */
+typedef struct serial_conn {
+    virtqueue_driver_t *send_queue;
+    virtqueue_device_t *recv_queue;
+} serial_conn_t;
+
 static virtio_con_t *virtio_con = NULL;
 static serial_conn_t connections[NUM_PORTS];
-
-extern void *serial_getchar_buf;
 
 /* This matches the size of the buffer in serial server */
 #define BUFSIZE 4088
