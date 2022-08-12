@@ -59,7 +59,7 @@ static struct staging_buf staging_area[NUM_PORTS];
 static void virtio_con_notify_free_send(virtqueue_driver_t *queue)
 {
     void *buf = NULL;
-    size_t buf_size = 0, wr_len = 0;
+    uint32_t buf_size = 0, wr_len = 0;
     vq_flags_t flag;
     virtqueue_ring_object_t handle;
     while (virtqueue_get_used_buf(queue, &handle, &wr_len)) {
@@ -129,6 +129,10 @@ static void tx_virtcon_forward(int port, char c)
 #endif
 }
 
+void init_putchar(char c)
+{
+    tx_virtcon_forward(0, c);
+}
 
 static void make_virtio_con_virtqueues(void)
 {
@@ -167,7 +171,8 @@ static void console_handle_irq(void *cookie)
         ZF_LOGE("NULL virtio cookie given to raw irq handler");
         return;
     }
-    int err = vm_inject_irq(virtio_cookie->vm->vcpus[BOOT_VCPU], 6);
+
+    int err = vm_inject_irq(virtio_cookie->vm->vcpus[BOOT_VCPU], 9);
     if (err) {
         ZF_LOGE("Failed to inject irq");
         return;
@@ -195,7 +200,7 @@ void make_virtio_con_driver(vm_t *vm, vmm_pci_space_t *pci, vmm_io_port_list_t *
     backend.console_data = (void *)console_cookie;
     ioport_range_t virtio_port_range = {0, 0, VIRTIO_IOPORT_SIZE};
     virtio_con = common_make_virtio_con(vm, pci, io_ports, virtio_port_range, IOPORT_FREE,
-                                        6, 6, backend);
+                                        9, 9, backend);
     console_cookie->virtio_con = virtio_con;
     console_cookie->vm = vm;
 

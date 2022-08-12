@@ -133,10 +133,9 @@ void serial_pre_init(void);
 
 void pre_init(void)
 {
-    printf("PRE INIT\n");
     int error;
 
-    // set_putchar(putchar_putchar);
+    set_putchar(init_putchar);
 
     /* Camkes adds nothing to our address space, so this array is empty */
     void *existing_frames[] = {
