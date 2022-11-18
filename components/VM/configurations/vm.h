@@ -88,7 +88,7 @@
     vm##num.serial_getchar_shmem_size = 0x1000; \
     vm##num.simple = true; \
     vm##num.asid_pool = true; \
-    vm##num.global_endpoint_mask = 0x1fffffff & ~0x1fffe; \
+    vm##num.global_endpoint_mask = 0x1fffffff & ~0xffffe; \
     vm##num.global_endpoint_base = 1 << 27; \
     VM_MAYBE_ZONE_DMA(num) \
     /**/
@@ -116,7 +116,7 @@
 
 #define VM_CONFIGURATION_DEF() \
     fserv.heap_size = 0x30000; \
-    time_server.timers_per_client = 9; \
+    time_server.timers_per_client = 10; \
     /* Put the entire time server at the highest priority */ \
     time_server.priority = 255; \
     /* The timer server runs better if it can get the true tsc frequency from the kernel */ \
